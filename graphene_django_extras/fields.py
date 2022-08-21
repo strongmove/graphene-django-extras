@@ -313,6 +313,10 @@ class DjangoListObjectField(Field):
         filter_kwargs = {k: v for k, v in kwargs.items() if k in filtering_args}
 
         qs = filterset_class(data=filter_kwargs, queryset=qs, request=info.context).qs
+        try:
+            qs.cache()
+        except Exception as e:
+            print(e)
         count = qs.count()
 
         return DjangoListObjectBase(
